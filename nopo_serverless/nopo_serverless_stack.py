@@ -31,4 +31,13 @@ class NopoServerlessStack(Stack):
             aws_lambda_event_sources.DynamoEventSource(raw_table,
                                                        starting_position=aws_lambda.StartingPosition.LATEST))
 
+        aggregates_table = aws_dynamodb.Table(
+            self, "nopo_star_avg_table", partition_key=aws_dynamodb.Attribute(
+                name="pk",
+                type=aws_dynamodb.AttributeType.STRING
+            )
+        )
 
+        function.add_environment("TABLE_NAME", aggregates_table.table_name)
+
+        aggregates_table.grant_write_data(function)

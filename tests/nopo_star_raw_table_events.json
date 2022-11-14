@@ -1,0 +1,43 @@
+{
+   "Records":[
+      {
+         "eventID":"123",
+         "eventName":"INSERT",
+         "eventVersion":"1.1",
+         "eventSource":"aws:dynamodb",
+         "awsRegion":"ap-northeast-2",
+         "dynamodb":{
+            "ApproximateCreationDateTime":1668427391.0,
+            "Keys":{
+               "pk":{
+                  "S":"id1"
+               }
+            },
+            "NewImage":{
+               "LOCATION_ADDRESS":{
+                  "S":"서울특별시 종로구 을지로 64"
+               },
+               "RATING_COUNT":{
+                  "N":"2"
+               },
+               "BUSINESS_STATUS_CODE":{
+                  "S":"1"
+               },
+               "RATING_SUM":{
+                  "N":"10"
+               },
+               "pk":{
+                  "S":"id1"
+               },
+               "LICENSE_ISSUE_DATE":{
+                  "S":"20220101"
+               }
+            },
+            "SequenceNumber":"123",
+            "SizeBytes":137,
+            "StreamViewType":"NEW_IMAGE"
+         },
+         "eventSourceARN":"arn:aws:dynamodb:ap-northeast-2:123:table/NopoServerlessStack-nopostarrawtable123/stream/2022-11-14T11:44:54.910"
+      }
+   ]
+}
