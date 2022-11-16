@@ -19,14 +19,16 @@ def handler(event, context):
 
         new_image = record['dynamodb']['NewImage'] | record['dynamodb']['Keys']
 
-        rating_avg = str(
-            round(int(new_image['RATING_SUM']['N'])
-                  / int(new_image['RATING_COUNT']['N']), 2))
-
-        item = {'RATING_AVG': rating_avg}
+        item = {}
 
         for key, value in new_image.items():
             item[key] = [int(v) if k == 'N' else v for k, v in value.items()][0]
+
+        rating_avg = str(
+            round(int(item['RATING_SUM'])
+                  / int(item['RATING_COUNT']), 2))
+
+        item['RATING_AVG'] = rating_avg
 
         reversed_issue_date = str(99999999 - int(item["LICENSE_ISSUE_DATE"]))
         location = item["LOCATION_ADDRESS"].split()[0]
