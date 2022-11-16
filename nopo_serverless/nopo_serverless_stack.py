@@ -38,6 +38,42 @@ class NopoServerlessStack(Stack):
             )
         )
 
+        gsi1 = 'gsi1'
+        gsi1pk = 'gsi1pk'
+        gsi1sk = 'gsi1sk'
+
+        aggregates_table.add_global_secondary_index(index_name=gsi1,
+                                                    partition_key=aws_dynamodb.Attribute(
+                                                        name=gsi1pk,
+                                                        type=aws_dynamodb.AttributeType.STRING
+                                                    ),
+                                                    sort_key=aws_dynamodb.Attribute(
+                                                        name=gsi1sk,
+                                                        type=aws_dynamodb.AttributeType.STRING
+                                                    ),
+                                                    projection_type=aws_dynamodb.ProjectionType.ALL
+                                                    )
+
+        gsi2 = 'gsi2'
+        gsi2pk = 'gsi2pk'
+        gsi2sk = 'gsi2sk'
+
+        aggregates_table.add_global_secondary_index(index_name=gsi2,
+                                                    partition_key=aws_dynamodb.Attribute(
+                                                        name=gsi2pk,
+                                                        type=aws_dynamodb.AttributeType.STRING
+                                                    ),
+                                                    sort_key=aws_dynamodb.Attribute(
+                                                        name=gsi2sk,
+                                                        type=aws_dynamodb.AttributeType.STRING
+                                                    ),
+                                                    projection_type=aws_dynamodb.ProjectionType.ALL
+                                                    )
+
         function.add_environment("TABLE_NAME", aggregates_table.table_name)
+        function.add_environment("GSI1PK", gsi1pk)
+        function.add_environment("GSI1SK", gsi1sk)
+        function.add_environment("GSI2PK", gsi2pk)
+        function.add_environment("GSI2SK", gsi2sk)
 
         aggregates_table.grant_write_data(function)
