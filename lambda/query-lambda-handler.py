@@ -1,5 +1,6 @@
 import os
 import boto3
+import json
 from boto3.dynamodb.conditions import Key
 
 dynamodb = boto3.resource('dynamodb')
@@ -20,10 +21,23 @@ def handler(event, context):
 
     response = table.query(
         IndexName=GSI1,
-        KeyConditionExpression=Key(GSI1PK).eq("1") & Key(GSI1SK).begins_with("1")
+        KeyConditionExpression=Key(GSI1PK).eq("1")
     )
+
+    response_attrs = ["pk", "LOCATION_ADDRESS", "RATING_AVG", "RATING_COUNT"]
+
+    items = []
+
+    for item in response['Items']:
+
+        item_dict = {}
+
+        for attr in response_attrs:
+            item_dict[attr] = str(item.get(attr))
+
+        items.append(item_dict)
 
     return {
         'statusCode': 200,
-        'body': response
+        'body': json.dumps(items)
     }

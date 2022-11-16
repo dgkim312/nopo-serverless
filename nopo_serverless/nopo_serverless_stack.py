@@ -2,7 +2,8 @@ from aws_cdk import (
     Stack,
     aws_dynamodb,
     aws_lambda,
-    aws_lambda_event_sources
+    aws_lambda_event_sources,
+    aws_apigateway
 )
 from constructs import Construct
 
@@ -94,3 +95,5 @@ class NopoServerlessStack(Stack):
         query_function.add_environment("GSI2", gsi2)
         query_function.add_environment("GSI2PK", gsi2pk)
         query_function.add_environment("GSI2SK", gsi2sk)
+
+        aws_apigateway.LambdaRestApi(self, "TopRatingQueryEndpoint", handler=query_function)
