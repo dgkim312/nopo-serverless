@@ -77,3 +77,20 @@ class NopoServerlessStack(Stack):
         function.add_environment("GSI2SK", gsi2sk)
 
         aggregates_table.grant_write_data(function)
+
+        query_function = aws_lambda.Function(
+            self, "starRatingQuery",
+            runtime=aws_lambda.Runtime.PYTHON_3_9,
+            code=aws_lambda.Code.from_asset('lambda'),
+            handler='query-lambda-handler.handler'
+        )
+
+        aggregates_table.grant_read_data(query_function)
+
+        query_function.add_environment("TABLE_NAME", aggregates_table.table_name)
+        query_function.add_environment("GSI1", gsi1)
+        query_function.add_environment("GSI1PK", gsi1pk)
+        query_function.add_environment("GSI1SK", gsi1sk)
+        query_function.add_environment("GSI2", gsi2)
+        query_function.add_environment("GSI2PK", gsi2pk)
+        query_function.add_environment("GSI2SK", gsi2sk)
