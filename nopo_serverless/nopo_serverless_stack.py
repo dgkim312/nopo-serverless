@@ -3,7 +3,8 @@ from aws_cdk import (
     aws_dynamodb,
     aws_lambda,
     aws_lambda_event_sources,
-    aws_apigateway
+    aws_apigateway,
+    aws_sqs
 )
 from constructs import Construct
 
@@ -97,3 +98,18 @@ class NopoServerlessStack(Stack):
         query_function.add_environment("GSI2SK", gsi2sk)
 
         aws_apigateway.LambdaRestApi(self, "TopRatingQueryEndpoint", handler=query_function)
+
+        queue = aws_sqs.Queue(self, "StarQueue")
+
+        star_event_handler = aws_lambda.Function(
+            self, "starEventHandler",
+            runtime=aws_lambda.Runtime.PYTHON_3_9,
+            code=aws_lambda.Code.from_asset('lambda'),
+            handler='star-event-handler.handler'
+        )
+
+        star_event_handler.add_event_source(aws_lambda_event_sources.SqsEventSource(queue))
+
+        raw_table.grant_write_data(star_event_handler)
+
+        star_event_handler.add_environment("TABLE_NAME", raw_table.table_name)
